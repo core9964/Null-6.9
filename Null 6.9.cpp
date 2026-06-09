@@ -10,19 +10,17 @@
 // 武器クラス（親クラス）
 class Weapon {
 public:
-	// virtual を付けることで
-	// 子クラス側で関数を上書きできる
+	// virtual を付けることで 子クラス側で関数を上書きする
 	virtual void Use() {
 		std::cout << "Weapon Attack!" << std::endl;
 	}
 };
 
-// 剣クラス（Weapon を継承）
+// 剣クラス（Weapon を継承する）
 class Sword : public Weapon {
+
 public:
-	// override
-	// 「親クラスの関数を上書きしています」
-	// という意味
+	// override 「親クラスの関数を上書きしています」ということ
 	void Use() override {
 		std::cout << "Sword Slash!" << std::endl;
 	}
@@ -30,19 +28,17 @@ public:
 
 // プレイヤークラス
 class Player {
-	// shared_ptr
-	// 自動でメモリ管理をしてくれるスマートポインタ
+	// shared_ptr　自動でメモリ管理をしてくれるスマートポインタ
 	std::shared_ptr<Weapon> weapon;
+
 public:
 	
 	// コンストラクタ
 	// weapon1 を受け取る
 	Player(std::shared_ptr<Weapon> weapon1)
-		// std::move を使うことで
-		// weapon1 の所有権を weapon に移動する
-		//
-		// コピーではないので
-		// 無駄な参照カウント増加を防げる
+		// std::move を使うことで weapon1 の所有権を weapon に移動する
+	
+		// コピーではないので 無駄な参照カウント増加を防げる
 		: weapon(std::move(weapon1))
 	{
 		std::cout << "Player Constructor" << std::endl;
@@ -53,6 +49,8 @@ public:
 		std::cout << "weapon use_count : "
 			<< weapon.use_count()
 			<< std::endl;
+
+
 		// weapon1 側
 		// moveされたので nullptr 状態
 		// use_count は 0
@@ -63,19 +61,20 @@ public:
 	
 	// 攻撃関数
 	void Attack() {
-		// weapon の Use() を実行
-		weapon->Use();
+		
+		weapon->Use();// weapon の Use() を実行
 	}
 };
+
 int main() {
 	
 	// Swordオブジェクト生成
-	// make_shared を使うことで
-	// shared_ptr を安全に生成できる
+	// make_shared を使うことで shared_ptr を安全に生成できる
 	auto sword = std::make_shared<Sword>();
 	
 	// move前の参照カウント確認
 	std::cout << "Before move" << std::endl;
+
 	// 現在 sword だけが所有しているので 1
 	std::cout << "sword : "
 		<< sword.use_count()
@@ -88,6 +87,7 @@ int main() {
 	
 	// move後の確認
 	std::cout << "After move" << std::endl;
+
 	// move後なので sword は nullptr
 	// use_count は 0
 	std::cout << "sword : "
