@@ -24,3 +24,4 @@ int main()
 	Func(new Test());
 	Func(nullptr);
 }
+
